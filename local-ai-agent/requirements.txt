@@ -1,0 +1,5 @@
+langchain
+langchain-ollama
+langchain-chroma
+pandas~=2.2.3
+langchain-core~=0.3.62
