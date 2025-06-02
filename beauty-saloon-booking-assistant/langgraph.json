@@ -1,0 +1,11 @@
+{
+  "dockerfile_lines": [],
+  "graphs": {
+    "research_assistant": "./booking_assistant.py:graph"
+  },
+  "env": "./.env",
+  "python_version": "3.12",
+  "dependencies": [
+    "."
+  ]
+}
