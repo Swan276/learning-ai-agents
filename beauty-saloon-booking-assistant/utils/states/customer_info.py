@@ -17,10 +17,25 @@ class CustomerInfo(BaseModel):
     )
     preferred_specialist: str = Field(
         description="Preferred specialist for the appointment",
+        default=""
     )
     special_requests: str = Field(
         description="Special requests for the appointment",
+        default=""
     )
     @property
     def customer_information(self) -> str:
         return f"Name: {self.name}\nContact Number: {self.contact_number}\nPreferred Services: {self.preferred_services}\nDate and Time: {self.date_and_time}\nPreferred Specialist: {self.preferred_specialist}\nSpecial Requests: {self.special_requests}"
+
+    @property
+    def csv(self):
+        return f"{self.name},{self.contact_number},{','.join(self.preferred_services)},{self.date_and_time.isoformat()},{self.preferred_specialist},{self.special_requests}"
+
+    def check_if_all_fields_present(self) -> bool:
+        if self.name and self.contact_number and self.preferred_services and self.date_and_time:
+            return True
+        else:
+            return False
+
+    def __str__(self):
+        return self.customer_information

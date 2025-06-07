@@ -2,16 +2,18 @@ import re
 import uuid
 from typing import Iterator
 
+from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.constants import START
-from langgraph.graph import StateGraph
+from langgraph.constants import START, END
+from langgraph.graph import StateGraph, MessagesState
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from utils.nodes.booking_assistant import booking_assistant
-from utils.states.assistant_state import AssistantState
+from utils.nodes.booking_assistant import booking_assistant, should_continue
 from utils.tools.tools import tools
+
+load_dotenv()
 
 class BookingAssistantAgent:
     def __init__(self, use_memory_checkpoint=True):
@@ -20,12 +22,12 @@ class BookingAssistantAgent:
 
     @staticmethod
     def build_graph(use_memory_checkpoint: bool) -> CompiledStateGraph:
-        builder = StateGraph(AssistantState)
+        builder = StateGraph(MessagesState)
         builder.add_node("booking_assistant", booking_assistant)
         builder.add_node("tools", ToolNode(tools))
 
         builder.add_edge(START, "booking_assistant")
-        builder.add_conditional_edges("booking_assistant", tools_condition)
+        builder.add_conditional_edges("booking_assistant", tools_condition, ["tools", END])
         builder.add_edge("tools", "booking_assistant")
 
         if use_memory_checkpoint:
@@ -35,20 +37,11 @@ class BookingAssistantAgent:
             return builder.compile()
 
     def invoke_stream(self, message: str) -> Iterator[str]:
-        removed_think = False
-        think_count = 2
         for msg, metadata in self.graph.stream(
                 {"messages": [HumanMessage(message + " /no_think")]},
                 self._config,
                 stream_mode="messages",
         ):
-            # for qwen3 only
-            if not removed_think:
-                think_count -= len(re.findall(r"</?think>", msg.content))
-                if think_count < 1:
-                    removed_think = True
-                yield re.sub(r"</?think>", "", msg.content).strip()
-            else:
-                yield msg.content
+            yield msg.content
 
 graph = BookingAssistantAgent(use_memory_checkpoint=False).graph

@@ -1,6 +1,5 @@
 import os
 import shutil
-from functools import lru_cache
 from langchain_chroma import Chroma
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.documents import Document
@@ -23,7 +22,7 @@ class GuidelineVectorStore:
         retriever = cls._create_new_vectorstore()
         return cls(retriever=retriever)
 
-    def query(self, query: str, k: int = 5) -> list[Document]:
+    def query(self, query: str, k: int = 3) -> list[Document]:
         return self._retriever.similarity_search(query, k=k)
 
     @staticmethod
@@ -42,7 +41,7 @@ class GuidelineVectorStore:
         # Extracts pages from a PDF file.
         loader = PyPDFLoader(PDF_PATH)
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=500,
+            chunk_size=300,
             chunk_overlap=100,
             add_start_index=True,
         )
@@ -62,8 +61,25 @@ class GuidelineVectorStore:
 
 retriever = GuidelineVectorStore()
 
-def lookup_guidelines(query: str) -> str:
-    """Check guidelines to see available services, booking policies and procedures.
-    Use this when customers ask something"""
-    docs = retriever.query(query)
-    return "\n\n".join([doc.page_content for doc in docs])
+def lookup_guidelines(query: str) -> dict:
+    """
+    Check guidelines to see available services, shop information, booking policies and procedures.
+
+    Args:
+        query (str): keyword of the required context.
+
+    Returns:
+        dict: A dictionary with the status and context.
+
+    Example:
+        lookup_guidelines(query="services")
+        {
+            'status': 'success',
+            'context': 'Popular Services Include: Haircut, Hairstyling, Makeup, Nail'
+        }
+    """
+    try:
+        docs = retriever.query(query)
+        return {"status": "success", "context": "\n\n".join([doc.page_content for doc in docs])}
+    except Exception as e:
+        return {"status": "failure", "message": str(e)}

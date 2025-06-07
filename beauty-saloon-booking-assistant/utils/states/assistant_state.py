@@ -6,5 +6,4 @@ from langgraph.graph import add_messages
 from utils.states.customer_info import CustomerInfo
 
 class AssistantState(TypedDict):
-    customer_info: CustomerInfo
     messages: Annotated[list[BaseMessage], add_messages]
