@@ -1,7 +1,0 @@
-pydantic
-python-dotenv
-requests
-langchain-core
-langchain
-langchain_ollama
-langchain-google-genai

@@ -1,5 +1,0 @@
-langgraph
-langchain
-langchain-ollama
-langchain-core~=0.3.62
-langchain_openai
