@@ -8,3 +8,4 @@ pydantic~=2.11.5
 langchain-google-genai
 langchain~=0.3.25
 python-dotenv~=1.1.0
+pandas~=2.2.3

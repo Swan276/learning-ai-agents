@@ -1,4 +1,3 @@
-import re
 import uuid
 from typing import Iterator
 
@@ -10,7 +9,7 @@ from langgraph.graph import StateGraph, MessagesState
 from langgraph.graph.state import CompiledStateGraph
 from langgraph.prebuilt import ToolNode, tools_condition
 
-from utils.nodes.booking_assistant import booking_assistant, should_continue
+from utils.nodes.booking_assistant import booking_assistant
 from utils.tools.tools import tools
 
 load_dotenv()

@@ -1,3 +1,3 @@
-Name,Contact Number,Preferred Services,Date and Time,Preferred Specialist,Special Requests
-Swan,087 1234123,Haircut,2025-06-08T11:00:00,Jessie,
-Swan,087 1234123,Haircut,Deep Conditioning,2025-06-08T11:00:00,Jessie,
+Id,Name,Contact Number,Preferred Services,Date,Start Time,End Time,Preferred Specialist,Special Requests
+4e2eab6d-1898-4192-807a-1cdd8dbb030a,Swan,123456789,"{'haircut,hair treatment'}",2025-06-07,12:00:00,T14:00:00,May,
+0b7093cd-69c6-4e38-b653-ddc77df6ec0d,Aye Chan Moe,123123123,"nail service,hair styling",2025-06-08,16:00,18:00,Hailey,

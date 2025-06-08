@@ -1,5 +1,6 @@
-from datetime import datetime
-
+import uuid
+from datetime import datetime, timedelta
+from typing import Self
 from pydantic import Field, BaseModel
 
 class CustomerInfo(BaseModel):
@@ -27,9 +28,13 @@ class CustomerInfo(BaseModel):
     def customer_information(self) -> str:
         return f"Name: {self.name}\nContact Number: {self.contact_number}\nPreferred Services: {self.preferred_services}\nDate and Time: {self.date_and_time}\nPreferred Specialist: {self.preferred_specialist}\nSpecial Requests: {self.special_requests}"
 
-    @property
-    def csv(self):
-        return f"{self.name},{self.contact_number},{','.join(self.preferred_services)},{self.date_and_time.isoformat()},{self.preferred_specialist},{self.special_requests}"
+    def df_array(self, booking_id: str = None):
+        booking_id = booking_id if booking_id is not None else str(uuid.uuid4())
+        start_datetime = self.date_and_time
+        end_datetime = self.date_and_time + timedelta(hours=len(self.preferred_services))
+        return [booking_id, self.name, self.contact_number, ','.join(self.preferred_services),
+                self.date_and_time.strftime("%Y-%m-%d"), start_datetime.strftime("%H:%M"), end_datetime.strftime("%H:%M"),
+                self.preferred_specialist, self.special_requests]
 
     def check_if_all_fields_present(self) -> bool:
         if self.name and self.contact_number and self.preferred_services and self.date_and_time:
