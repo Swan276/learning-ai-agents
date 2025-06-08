@@ -1,0 +1,11 @@
+langgraph~=0.4.7
+langchain-core~=0.3.62
+langchain-community~=0.3.24
+langchain-openai~=0.3.18
+langgraph-cli[inmem]
+langchain-text-splitters~=0.3.8
+pydantic~=2.11.5
+langchain-google-genai
+langchain~=0.3.25
+python-dotenv~=1.1.0
+pandas~=2.2.3
