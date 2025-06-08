@@ -3,7 +3,6 @@ import pandas as pd
 
 def update_appointment_sheet(customer_info: CustomerInfo, booking_id: str = None):
     df = pd.read_csv('./resources/appointments.csv')
-    print(customer_info.df_array)
     bid = booking_id
     if booking_id:
         df[df['Id'] == booking_id] = customer_info.df_array(booking_id)
